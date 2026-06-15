@@ -1,0 +1,75 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+\title{\textbf{Computer Methods in Combustion -- Final Project}\\ \large Numerical Analysis of Nitrogen Oxides (NOx) Emissions in Methane Combustion using Cantera}
+\author{Karol Niedziałek}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This project investigates the formation of nitrogen oxides (NOx), specifically nitric oxide (NO), during the combustion of methane ($CH_4$). The analysis relies on 0D constant-pressure reactor simulations performed using the open-source chemical kinetics software Cantera. By utilizing the comprehensive GRI 3.0 kinetic mechanism, a parametric study was conducted to evaluate the influence of residence time, initial mixture temperature, and equivalence ratio ($\Phi$) on thermal NO production.
+\end{abstract}
+
+\section{Introduction}
+The reduction of pollutant emissions is one of the primary drivers in modern combustion engineering. Nitrogen oxides (NOx) are highly toxic by-products responsible for smog formation and acid rain. In methane combustion, NO is predominantly formed via the thermal Zeldovich mechanism, which is highly temperature-dependent. The aim of this project is to implement computational methods to simulate the chemical kinetics of NO formation and identify the operating conditions that minimize its emission.
+
+\section{Methodology}
+The simulations were carried out using a Python script coupled with the \textbf{Cantera} library. The widely accepted \textbf{GRI 3.0} detailed chemical kinetic mechanism, which contains 53 species and 325 reactions, was employed.
+
+The combustion process was modeled using an \textit{Ideal Gas Constant Pressure Reactor}. The boundary conditions and parameter sweep ranges were defined as follows:
+\begin{itemize}
+    \item \textbf{Pressure:} 1 atm (constant throughout the process).
+    \item \textbf{Initial Temperature ($T_{init}$):} Ranged from 1200 K to 1800 K.
+    \item \textbf{Equivalence Ratio ($\Phi$):} Ranged from 0.6 (lean) to 1.4 (rich).
+    \item \textbf{Residence Time:} 0.1 seconds.
+\end{itemize}
+
+\section{Results and Discussion}
+
+\subsection{Kinetics of NO Formation}
+To understand the dynamics of the chemical reactions, an initial simulation was performed for a stoichiometric mixture ($\Phi = 1.0$) at an initial temperature of 1600 K. Figure \ref{fig:time_history} illustrates the mole fraction of NO over a period of 100 milliseconds. Unlike rapid hydrocarbon oxidation reactions which occur in fractions of a millisecond, NO formation is relatively slow and continues to increase monotonically as long as high temperatures are sustained.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{plot_time_history.png}
+    \caption{Time evolution of NO formation for a stoichiometric methane-air mixture at 1600 K.}
+    \label{fig:time_history}
+\end{figure}
+
+\subsection{Influence of Temperature and Mixture Composition}
+A parametric sweep was subsequently conducted to quantify the final NO emission after 0.1 s of residence time. Figure \ref{fig:no_vs_temp} compares the NO emissions for lean ($\Phi = 0.8$), stoichiometric ($\Phi = 1.0$), and rich ($\Phi = 1.2$) mixtures as a function of the initial temperature. 
+
+The results confirm the strong exponential dependence of thermal NO on temperature. Notably, the lean mixture produces significantly less NO at elevated initial temperatures compared to the stoichiometric mixture, primarily due to lower adiabatic flame temperatures.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{plot_no_vs_temp.png}
+    \caption{Effect of initial temperature on final NO emission for different equivalence ratios.}
+    \label{fig:no_vs_temp}
+\end{figure}
+
+\subsection{Comprehensive Emission Map}
+To provide a complete overview of the parameter space, a contour map was generated (Figure \ref{fig:contour}). The map reveals the critical operating regime. The highest NO emissions (the dark red region) occur at high initial temperatures combined with slightly lean to stoichiometric mixtures ($\Phi \approx 0.95 - 1.0$). Operating in the fuel-rich regime ($\Phi > 1.2$) or ultra-lean regime ($\Phi < 0.7$) drastically suppresses NO formation, although it may lead to other inefficiencies such as unburned hydrocarbons or flame instability.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{plot_contour.png}
+    \caption{Contour map depicting the dependence of NO emission (ppm) on initial temperature and equivalence ratio.}
+    \label{fig:contour}
+\end{figure}
+
+\section{Conclusion}
+Computational modeling using Cantera proved to be a robust method for analyzing combustion kinetics. The simulations successfully replicated the expected physical phenomena associated with the thermal Zeldovich mechanism. The results demonstrate that NO formation is critically dependent on high temperatures and available oxygen, highlighting the necessity of techniques such as Lean Premixed Combustion or Exhaust Gas Recirculation (EGR) to maintain low combustion temperatures in industrial applications.
+
+\end{document}
